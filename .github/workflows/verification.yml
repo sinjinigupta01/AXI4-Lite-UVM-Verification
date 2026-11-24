@@ -1,0 +1,25 @@
+name: AXI4-Lite UVM verification
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verification:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+      - name: Compile and run smoke and regression tests
+        run: scripts/run-verification.sh
+      - name: Upload simulation logs and coverage databases
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: uvm-verification
+          path: build/logs/
