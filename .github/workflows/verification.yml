@@ -2,6 +2,7 @@ name: AXI4-Lite UVM verification
 
 on:
   push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
