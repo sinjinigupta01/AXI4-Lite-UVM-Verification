@@ -20,7 +20,8 @@ if [[ "$(git -C build/uvm rev-parse HEAD)" != "$uvm_revision" ]]; then
 fi
 
 container=(docker run --rm --user "$(id -u):$(id -g)" -v "$PWD:/src" -w /src)
-"${container[@]}" "$image" --binary --timing --assert --coverage -j "${BUILD_JOBS:-2}" \
+"${container[@]}" -e CCACHE_DIR=/src/build/ccache \
+  "$image" --binary --timing --assert --coverage -j "${BUILD_JOBS:-2}" \
   --top-module tb_top --Mdir build/obj --timescale 1ns/1ps -Wno-fatal \
   +define+UVM_NO_DPI +incdir+build/uvm/src build/uvm/src/uvm_pkg.sv \
   tb/axi_lite_if.sv rtl/axi_lite_regs.sv tb/axi_lite_pkg.sv tb/tb_top.sv \
